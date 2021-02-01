@@ -1,0 +1,79 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <stdio.h>
+#include <fstream> 
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <limits>
+#include <chrono>  // for high_resolution_clock
+
+using namespace std;
+int Counter(string fileName) {
+	string unUsed;
+	int numLines = 0;
+	ifstream file(fileName);
+	//count how many lines does the file have
+	if (file.is_open())
+	{
+		while (getline(file, unUsed))
+		{
+			++numLines;
+		}
+		file.close();
+
+		return numLines;
+	}
+}
+
+
+int main()
+{
+	int size = 5;					// no longer const
+	int* arrayP = new int[size];	// allocated on heap
+	int numberOfLines = 0;
+
+	numberOfLines = Counter("Data1000.txt");
+	// check the size of the file.
+	
+	
+	//count how many lines does the file have
+
+	if (size < numberOfLines)
+	{
+		size = numberOfLines;
+		// create new bigger array.
+		int* tempP = new int[size];
+		for (int i = 0; i <= sizeof(tempP); i++)
+		{
+			// copy values to new array.
+			tempP[i] = arrayP[i];
+		}
+		// free old array memory.
+		delete[] arrayP;
+		// now a points to new array
+		arrayP = tempP;
+	}
+	// Record start time
+	auto begin = chrono::high_resolution_clock::now();
+	// Portion of code to be timed
+	cin.clear();
+
+	ifstream file("Data1000.txt");
+	file.clear();
+	file.seekg(0, ios::beg);
+	for (int i = 0; i < numberOfLines; i++)
+	{
+		file >> arrayP[i];
+		cout << "# " << arrayP[i] << " " ;
+	}
+	file.close();
+	auto end = chrono::high_resolution_clock::now();
+	// Record end time
+	//print recorded time
+	auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+	printf("Time measured: %.3f seconds.\n", elapsed.count() * 1e-9);
+
+	cout << numberOfLines << endl;
+}
